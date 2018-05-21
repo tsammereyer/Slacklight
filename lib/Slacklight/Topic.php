@@ -1,45 +1,24 @@
 <?php
 namespace Slacklight;
-SessionContext::create();
 
-class ShoppingCart extends BaseObject {
+class Topic extends Entity {
 
-    public static function add(int $bookId) {
-        $c = self::getCart();
-        $c[$bookId] = $bookId;
-        self::storeCart($c);
+    private $channelId;
+    private $name;
+
+    public function __construct(int $id, int $channelId, string $name) {
+        parent::__construct($id);
+        $this->channelId = $channelId;
+        $this->name = $name;
     }
 
-    public static function remove (int $bookId) {
-        $c = self::getCart();
-        unset($c[$bookId]);
-        self::storeCart($c);
+    public function getChannelId() : int {
+        return $this->channelId;
     }
 
-    public static function clear() {
-        self::storeCart(array());
+    public function getName() : string {
+        return $this->name;
     }
 
-    public static function contains (int $bookId) : bool {
-        $c = self::getCart();
-        return array_key_exists($bookId, $c);
-    }
-
-    public static function size() : int {
-        return sizeof(self::getCart());
-    }
-
-    public static function getAll() : array {
-        return self::getCart();
-    }
-
-
-    private static function getCart() : array {
-        return isset($_SESSION['cart']) ? $_SESSION['cart'] : array();
-    }
-
-    private static function storeCart(array $cart) {
-        $_SESSION['cart'] = $cart;
-    } 
 
 }

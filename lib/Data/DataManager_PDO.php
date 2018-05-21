@@ -4,6 +4,7 @@ namespace Data;
 use Slacklight\Channel;
 use Slacklight\Message;
 use Slacklight\User;
+use Slacklight\Topic;
 
 class DataManager {
 
@@ -62,7 +63,7 @@ class DataManager {
 
     }
 
-    public static function getMessagesByChannel(int $channelId) : array {
+    public static function getMessagesByChannelId(int $channelId) : array {
       $messages = array();
       $con = self::getConnection();
       $res = self::query($con, "
@@ -94,6 +95,21 @@ class DataManager {
         }
         return $channel;
     }
+
+    public static function getTopicsByChannelId(int $channelId) : array {
+        $topics = array();
+        $con = self::getConnection();
+        $res = self::query($con, "
+          SELECT id, channel_id, name
+          FROM topic 
+          WHERE channel_id = ?;
+          ", array($channelId));
+        while ($topic = self::fetchObject($res)) {
+              $topics[] = new Topic($topic->id, $topic->channel_id, $topic->name);
+        }
+        self::closeConnection();
+        return $topics; 
+      }
 
     public static function getUserByUserName (string $userName) {
        $user = null;

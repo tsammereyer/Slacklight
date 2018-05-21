@@ -4,13 +4,15 @@
   $channelId = isset($_REQUEST['channelId']) ? (int) $_REQUEST['channelId'] : null;
   $selectedChannel =  DataManager::getChannelByChannelId($channelId);
   $messages = array();
+  $topics = array();
   if($channelId !== null){
-    $messages = DataManager::getMessagesByChannel($channelId);
+    $messages = DataManager::getMessagesByChannelId($channelId);
     $selectedChannel =  DataManager::getChannelByChannelId($channelId);
+    $topics = DataManager::getTopicsByChannelId($channelId);
   }
   //var_dump($messages);
   //var_dump($selectedChannel);
-
+  //var_dump($topics);
   
 ?>
 
@@ -23,8 +25,11 @@
     <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
 
     <h2 class="page-header">#<?php echo $selectedChannel; ?></h2>
-       
-    <h4 class="sub-header">Company-wide announcements and work-based matters</h4>
+
+    <?php foreach ($topics as $topic) : ?>
+      <h4 class="sub-header"><?php echo $topic->getName(); ?></h4>
+    <?php endforeach; ?>
+
     <br/>
 
     <?php foreach ($messages as $message) : ?>
