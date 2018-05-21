@@ -2,7 +2,7 @@
   use Data\DataManager;
   $channels = DataManager::getChannels();
   $channelId = isset($_REQUEST['channelId']) ? (int) $_REQUEST['channelId'] : null;
-  $selectedChannel =  DataManager::getChannelByChannelId($channelId);
+  $selectedChannel =  null;
   $messages = array();
   $topics = array();
   if($channelId !== null){
@@ -45,7 +45,7 @@
     <?php endforeach; ?>
 
     <div class="input-group">
-      <input type="text" class="form-control" placeholder="Jot your message down here">
+      <input type="text" class="form-control" placeholder="Jot your message here">
       <span class="input-group-btn">
         <button class="btn btn-default" type="button">Send Message!</button>
       </span>

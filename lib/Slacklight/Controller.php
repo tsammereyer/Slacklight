@@ -9,6 +9,7 @@ class Controller extends BaseObject {
     const ACTION_ADD = 'addToCart';
     const ACTION_REMOVE = 'removeFromCart';
     const ACTION_LOGIN = 'login';
+    const ACTION_REGISTER = 'register';
     const ACTION_LOGOUT = 'logout';
     const USER_NAME = 'userName';
     const USER_PASSWORD = 'password';

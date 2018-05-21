@@ -2,7 +2,8 @@
 use Slacklight\Util, Slacklight\AuthenticationManager;
 
 $user = AuthenticationManager::getAuthenticatedUser();
-
+//var_dump($user);
+//die();
 if (isset($_GET['errors'])) {
     $errors = unserialize(urldecode($_GET['errors']));
 }
@@ -50,7 +51,7 @@ if (isset($_GET['errors'])) {
                         </a>
                         <ul class="dropdown-menu" role="menu">
                             <li>
-                                <a href="index.php?view=login">Login now</a>
+                            <a href="<?php echo $_SERVER['PHP_SELF']; ?>?view=login" > Login now</a>
                             </li>
                         </ul>
                     <?php else: ?>

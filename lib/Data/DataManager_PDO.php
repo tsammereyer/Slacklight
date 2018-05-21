@@ -115,12 +115,12 @@ class DataManager {
        $user = null;
        $con = self::getConnection();
        $res = self::query($con, "
-         SELECT id, userName, passwordHash 
+         SELECT id, name, password 
          FROM users
-         WHERE userName = ?
+         WHERE name = ?
        ", array($userName));
        if ($u = self::fetchObject($res)) {
-           $user = new User($u->id, $u->userName, $u->passwordHash);
+           $user = new User($u->id, $u->name, $u->password);
        }
        self::closeConnection();
        return $user;
@@ -130,12 +130,12 @@ class DataManager {
         $user = null;
         $con = self::getConnection();
         $res = self::query($con, "
-          SELECT id, userName, passwordHash 
+          SELECT id, name, password 
           FROM users
           WHERE id = ?
         ", array($userId));
         if ($u = self::fetchObject($res)) {
-            $user = new User($u->id, $u->userName, $u->passwordHash);
+            $user = new User($u->id, $u->name, $u->password);
         }
         self::closeConnection();
         return $user;
