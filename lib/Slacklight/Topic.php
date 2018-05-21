@@ -1,5 +1,5 @@
 <?php
-namespace Bookshop;
+namespace Slacklight;
 SessionContext::create();
 
 class ShoppingCart extends BaseObject {

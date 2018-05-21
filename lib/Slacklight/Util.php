@@ -1,6 +1,6 @@
 <?php
 
-namespace Bookshop;
+namespace Slacklight;
 
  class Util extends BaseObject {
 
@@ -16,7 +16,7 @@ namespace Bookshop;
 
   /**
    * redirect mit optionaler url - HINWEIS - redirection attack möglich!
-   *
+   *  
    * @param string $page  uri optional
    * @return null
    */

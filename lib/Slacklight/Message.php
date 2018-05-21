@@ -28,7 +28,7 @@ class Message extends Entity {
         return $this->channelId;
     }
 
-    public function getUsername() : int {
+    public function getUsername() : string {
         return $this->username;
     }
 
