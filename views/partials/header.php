@@ -51,7 +51,10 @@ if (isset($_GET['errors'])) {
                         </a>
                         <ul class="dropdown-menu" role="menu">
                             <li>
-                            <a href="<?php echo $_SERVER['PHP_SELF']; ?>?view=login" > Login now</a>
+                                <a href="<?php echo $_SERVER['PHP_SELF']; ?>?view=login" > Login</a>
+                            </li>
+                            <li>
+                                <a href="<?php echo $_SERVER['PHP_SELF']; ?>?view=register" > Register</a>
                             </li>
                         </ul>
                     <?php else: ?>

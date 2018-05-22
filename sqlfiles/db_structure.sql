@@ -56,10 +56,10 @@ ADD CONSTRAINT message_belongs_to_channel FOREIGN KEY (channel_id) REFERENCES ch
 
 
 INSERT INTO users (name, password) 
-VALUES ('hans', 'hans');
+VALUES ('hans', '0ba7335aa392b86ba4888087f0b308b1f8024f0e');
 
 INSERT INTO users (name, password) 
-VALUES ('franz', 'franz');
+VALUES ('franz', 'b54078ec72181fc043d010d2dc72269da4f600a1');
 
 INSERT INTO channel (name) 
 VALUES ('general');

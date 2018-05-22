@@ -15,8 +15,7 @@ class AuthenticationManager extends BaseObject {
         //var_dump($user);
         //die();
 
-        if ($user != null && $user->getPasswordHash() == $password){
-//            == hash('sha1', "$userName|$password")) {
+        if ($user != null && $user->getPasswordHash() == hash('sha1', "$userName|$password")) {
                 $_SESSION['user'] = $user->getId();
                 return true;
 
@@ -39,6 +38,23 @@ class AuthenticationManager extends BaseObject {
 
     }
 
+    public static function registerUser(string $userName, string $password) : bool {
+        if (\Data\DataManager::getUserByUserName($userName)) {
+            self::signOut();
+            return false;
+        } else {
+        // create a new user in the db and pass on its generated id to variable $user
+           $x =  \Data\DataManager::createUser(
+               $userName,
+               hash('sha1', $userName . '|' . $password)
+           );
+        $user = \Data\DataManager::getUserById($x);
+        var_dump($x);
+        var_dump($user);
+        $_SESSION['user'] = $user->getId();
+        return true;
+        }
+    }
 
 
 

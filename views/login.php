@@ -28,13 +28,13 @@ require_once('views/partials/header.php');
                 <div class="form-group">
                     <label for="inputName" class="col-sm-2 control-label">User name:</label>
                     <div class="col-sm-6">
-                        <input type="text" class="form-control" id="inputName" name="<?php print Slacklight\Controller::USER_NAME; ?>" placeholder="try 'scm4'" value="<?php echo htmlentities($userName); ?>">
+                        <input type="text" class="form-control" id="inputName" name="<?php print Slacklight\Controller::USER_NAME; ?>" placeholder="username" value="<?php echo htmlentities($userName); ?>">
                     </div>
                 </div>
                 <div class="form-group">
                     <label for="inputPassword" class="col-sm-2 control-label">Password</label>
                     <div class="col-sm-6">
-                        <input type="password" class="form-control" id="inputPassword" name="<?php print Slacklight\Controller::USER_PASSWORD; ?>" placeholder="try 'scm4'">
+                        <input type="password" class="form-control" id="inputPassword" name="<?php print Slacklight\Controller::USER_PASSWORD; ?>" placeholder="password">
                     </div>
                 </div>
                 <div class="form-group">
@@ -43,7 +43,7 @@ require_once('views/partials/header.php');
                     </div>
                 </div>
             </form>
-
+            <a href="<?php echo $_SERVER['PHP_SELF']; ?>?view=register" > new here? -> Register</a>
         </div>
     </div>
 

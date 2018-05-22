@@ -40,6 +40,9 @@ class DataManager {
         return $cursor->fetchObject();
     }
 
+    private static function lastInsertId($connection) {
+		return $connection->lastInsertId();
+	}
 
     private static function closeConnection() {
         self::$__connection = null;
@@ -96,6 +99,8 @@ class DataManager {
         return $channel;
     }
 
+
+
     public static function getTopicsByChannelId(int $channelId) : array {
         $topics = array();
         $con = self::getConnection();
@@ -139,6 +144,33 @@ class DataManager {
         }
         self::closeConnection();
         return $user;
+    }
+
+    public static function createUser(string $userName, string $passwordHash) : int {
+        
+        $con = self::getConnection();
+        $con->beginTransaction();
+        try {
+            self::query($con,"
+                INSERT INTO users (
+                    name,
+                    password
+                ) VALUES (
+                    ?, ?
+                );
+            
+                ", [
+                    $userName,
+                    $passwordHash
+                ]);
+            $userId = self::lastInsertId($con);
+            $con->commit();
+        } catch (\Exception $e) {
+            $con->rollBack();
+            $userId = null;
+        }
+        self::closeConnection($con);
+	    return $userId;
     }
 
     public static function createOrder (int $userId, array $bookIds, string $nameOnCard, string $cardNumber) : int {

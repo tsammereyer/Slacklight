@@ -61,6 +61,15 @@ class Controller extends BaseObject {
                 Util::redirect();
                 break;
 
+            case self::ACTION_REGISTER : 
+            if (!AuthenticationManager::registerUser($_REQUEST[self::USER_NAME], $_REQUEST[self::USER_PASSWORD]))
+                self::forwardRequest(['User already exists.']);
+            Util::redirect();
+            break;
+            default :
+                throw new \Exception('Unknown controller action: ' . $action);
+                break;
+
             case self::ACTION_LOGOUT : 
                     \Slacklight\AuthenticationManager::signOUt();
                     Util::redirect();
