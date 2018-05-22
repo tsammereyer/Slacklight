@@ -1,6 +1,10 @@
 <?php 
-  use Data\DataManager;
-  $channels = DataManager::getChannels();
+  use Data\DataManager, Slacklight\AuthenticationManager;
+
+  $user = AuthenticationManager::getAuthenticatedUser();
+
+  //$channels = DataManager::getChannels();
+  $channels = DataManager::getChannelsByUserId($user->getId());
   $channelId = isset($_REQUEST['channelId']) ? (int) $_REQUEST['channelId'] : null;
 ?>
 <div class="col-sm-3 col-md-2 sidebar">

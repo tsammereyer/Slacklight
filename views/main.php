@@ -1,5 +1,5 @@
 <?php 
-  use Data\DataManager, Slacklight\AuthenticationManager;;
+  use Data\DataManager, Slacklight\AuthenticationManager;
   $channels = DataManager::getChannels();
   $channelId = isset($_REQUEST['channelId']) ? (int) $_REQUEST['channelId'] : null;
   $selectedChannel =  null;

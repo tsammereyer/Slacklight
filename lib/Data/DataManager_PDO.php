@@ -66,6 +66,25 @@ class DataManager {
 
     }
 
+    public static function getChannelsByUserId(int $userId) : array {
+        $channels = array();
+        $con = self::getConnection();
+        $res = self::query($con, "
+            SELECT channel.id, name 
+            FROM channel
+            JOIN channel_user_reference ON (channel.id = channel_id)
+            WHERE user_id = ?
+        ", array($userId));
+
+        while ($cat = self::fetchObject($res)) {
+            $channels[] = new Channel($cat->id, $cat->name);
+        }
+        self::closeConnection();
+
+        return $channels;
+
+    }
+
     public static function getMessagesByChannelId(int $channelId) : array {
       $messages = array();
       $con = self::getConnection();
