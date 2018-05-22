@@ -1,5 +1,5 @@
 <?php 
-  use Data\DataManager;
+  use Data\DataManager, Slacklight\AuthenticationManager;;
   $channels = DataManager::getChannels();
   $channelId = isset($_REQUEST['channelId']) ? (int) $_REQUEST['channelId'] : null;
   $selectedChannel =  null;
@@ -9,6 +9,11 @@
     $messages = DataManager::getMessagesByChannelId($channelId);
     $selectedChannel =  DataManager::getChannelByChannelId($channelId);
     $topics = DataManager::getTopicsByChannelId($channelId);
+  }
+
+  $user = AuthenticationManager::getAuthenticatedUser();
+  if ($user == null){
+    header('Location: ' . $_SERVER['PHP_SELF'] . '?view=login');
   }
   //var_dump($messages);
   //var_dump($selectedChannel);
