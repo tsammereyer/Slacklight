@@ -1,5 +1,5 @@
 <?php 
-  use Data\DataManager, Slacklight\AuthenticationManager;
+  use Data\DataManager, Slacklight\AuthenticationManager, Slacklight\Util;;
   $channels = DataManager::getChannels();
   $channelId = isset($_REQUEST['channelId']) ? (int) $_REQUEST['channelId'] : null;
   $selectedChannel =  null;
@@ -40,21 +40,37 @@
     <?php foreach ($messages as $message) : ?>
       <div class="panel panel-default">
         <div class="panel-heading">
-          <h3 class="panel-title"><?php echo $message->getUsername(); ?></h3>
+          <h3 class="panel-title">
+            <?php if ($message->getFavourite() == 1): ?>
+              <span class="glyphicon glyphicon-star"></span>
+            <?php else: ?>
+              <span class="glyphicon glyphicon-star-empty"></span>
+            <?php endif; ?>
+            <?php if ($message->getSeen() == 0): ?>
+              <strong><?php echo $message->getUsername(); ?></strong>
+              <?php else: ?>
+              <?php echo $message->getUsername(); ?>
+            <?php endif; ?>
+          </h3>
             <?php echo $message->getCreated(); ?>
         </div>
         <div class="panel-body">
           <?php echo $message->getContent(); ?>
+          <!-- if seen from others? O.o-->
+          <span class="glyphicon glyphicon-trash"></span>
         </div>
+
       </div>
     <?php endforeach; ?>
 
+    <form class="form-horizontal" method="post" action="<?php echo Util::action(Slacklight\Controller::ACTION_SENDMESSAGE, array('view' => $view, "channelId" => $channelId)); ?>">
     <div class="input-group">
-      <input type="text" class="form-control" placeholder="Jot your message here">
+      <input type="text" required class="form-control" id="sendMessageField" name="<?php print Slacklight\Controller::SEND_MESSAGE_FIELD; ?>" placeholder="Jot your message here">
       <span class="input-group-btn">
-        <button class="btn btn-default" type="button">Send Message!</button>
+        <button class="btn btn-default" type="submit">Send Message!</button>
       </span>
     </div>
+    </form>
   
 </div>
 

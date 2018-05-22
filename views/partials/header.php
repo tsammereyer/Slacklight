@@ -62,7 +62,6 @@ if (isset($_GET['errors'])) {
                   Logged in as  <span class="badge"><?php echo Util::escape($user->getUserName()); ?></span>
                   <b class="caret"></b>
                 </a>
-                </a>
                 <ul class="dropdown-menu" role="menu">
                   <li class="centered">
                     <form method="post" action="<?php echo Util::action(Slacklight\Controller::ACTION_LOGOUT); ?>">

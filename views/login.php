@@ -46,6 +46,5 @@ require_once('views/partials/header.php');
             <a href="<?php echo $_SERVER['PHP_SELF']; ?>?view=register" > new here? -> Register</a>
         </div>
     </div>
-
 <?php
 require_once('views/partials/footer.php');

@@ -48,6 +48,8 @@ CREATE TABLE message (
 	content VARCHAR(1000) NOT NULL, 
 	created DATETIME DEFAULT CURRENT_TIMESTAMP,
 	deleted TINYINT(1) NOT NULL DEFAULT FALSE,
+	seen TINYINT(1) NOT NULL DEFAULT FALSE,
+	favourite TINYINT(1) NOT NULL DEFAULT FALSE,
 	PRIMARY KEY (id)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 CHARSET=utf8;
 
@@ -73,14 +75,14 @@ VALUES (1, "Company-wide announcements and work-based matters");
 INSERT INTO topic (channel_id, name) 
 VALUES (2, "Non-work banter and water cooler conversation");
 
-INSERT INTO message (user_id, channel_id, content, created) 
-VALUES (1, 1, "heyho, whats up?", '2018-05-06 15:01:35');
+INSERT INTO message (user_id, channel_id, content, created, seen, favourite)
+VALUES (1, 1, "heyho, whats up?", '2018-05-06 15:01:35', 1, 0);
 
-INSERT INTO message (user_id, channel_id, content, created) 
-VALUES (2, 1, "hey hans, i am fine how are you?", '2018-05-06 16:41:23');
+INSERT INTO message (user_id, channel_id, content, created,  seen, favourite) 
+VALUES (2, 1, "hey hans, i am fine how are you?", '2018-05-06 16:41:23', 1, 1);
 
-INSERT INTO message (user_id, channel_id, content, created) 
-VALUES (1, 2, "random", '2018-05-06 14:15:35');
+INSERT INTO message (user_id, channel_id, content, created, seen, favourite) 
+VALUES (1, 2, "random", '2018-05-06 14:15:35', 1, 0);
 
 INSERT INTO channel_user_reference (user_id, channel_id) 
 VALUES (1, 1);

@@ -89,14 +89,14 @@ class DataManager {
       $messages = array();
       $con = self::getConnection();
       $res = self::query($con, "
-        SELECT message.id, user_id ,channel_id, name, content, created
+        SELECT message.id, user_id ,channel_id, name, content, created, seen, favourite
         FROM message 
         JOIN users ON (users.id = user_id)
         WHERE deleted = 0
         AND channel_id = ?;
         ", array($channelId));
       while ($message = self::fetchObject($res)) {
-            $messages[] = new Message($message->id, $message->user_id, $message->channel_id, $message->name, $message->content, $message->created);
+            $messages[] = new Message($message->id, $message->user_id, $message->channel_id, $message->name, $message->content, $message->created, $message->seen, $message->favourite);
       }
       self::closeConnection();
       return $messages; 
@@ -191,6 +191,49 @@ class DataManager {
         self::closeConnection($con);
 	    return $userId;
     }
+
+    //create message
+    //INSERT INTO `message` (`id`, `user_id`, `channel_id`, `content`, `created`, `deleted`) 
+    //VALUES ('4', '1', '1', 'asdasdasdasdasdasd', CURRENT_TIMESTAMP, '0');
+    public static function sendMessage (int $userId, int $channelId, string $content) : int {
+        
+        $con = self::getConnection();
+  
+        $con->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
+        
+        $con->beginTransaction();
+        try {
+          self::query($con, "
+              INSERT INTO message (
+                  user_id,
+                  channel_id,
+                  content,
+                  created,
+                  deleted,
+                  seen,
+                  favourite
+              ) VALUES (
+                  ?,
+                  ?,
+                  ?,
+                  CURRENT_TIMESTAMP,
+                  0,
+                  0,
+                  0
+              );", array($userId, $channelId, $content));
+  
+              $messageId = $con->lastInsertId();
+              $con->commit();
+          
+        }
+        catch (Exception $e) {
+            $con->rollBack();
+            $messageId = null;
+        }
+        self::closeConnection();
+        return $messageId;
+      }
+
 
     public static function createOrder (int $userId, array $bookIds, string $nameOnCard, string $cardNumber) : int {
       $con = self::getConnection();

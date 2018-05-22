@@ -9,15 +9,20 @@ class Message extends Entity {
     private $username;
     private $content;
     private $created;
+    private $seen;
+    private $favourite;
 
     public function __construct(int $id, int $userId, int $channelId, string $username, string $content,
-                 string $created) {
+                 string $created, int $seen, int $favourite) {
         parent::__construct($id);
         $this->userId = $userId;
         $this->channelId = $channelId;
         $this->username = $username;
         $this->content = $content;
         $this->created = $created;
+        $this->seen = $seen;
+        $this->favourite = $favourite;
+
     }
 
     public function getUserId() : int {
@@ -38,6 +43,14 @@ class Message extends Entity {
 
     public function getCreated() : string {
         return $this->created;
+    }
+
+    public function getSeen() : string {
+        return $this->seen;
+    }
+    
+    public function getFavourite() : string {
+        return $this->favourite;
     }
 
 }

@@ -14,8 +14,8 @@ class Controller extends BaseObject {
     const USER_NAME = 'userName';
     const USER_PASSWORD = 'password';
     const ACTION_ORDER = 'placeOrder';
-    const CC_NAME = 'nameOnCard';
-    const CC_NUMBER = 'cardNumber';
+    const ACTION_SENDMESSAGE = "sendMessage";
+    const SEND_MESSAGE_FIELD = 'sendMessageField';
 
 
     private static $instance = false;
@@ -85,6 +85,21 @@ class Controller extends BaseObject {
                     break;
                 else 
                     return null;
+
+            case self::ACTION_SENDMESSAGE :
+                $user = \Slacklight\AuthenticationManager::getAuthenticatedUser();
+                $channelId = isset($_REQUEST['channelId']) ? (int) $_REQUEST['channelId'] : null;
+                //var_dump($channelId);
+                //var_dump($_POST[self::SEND_MESSAGE_FIELD]);
+                //die();
+                if ($user == null) {
+                    $this->forwardRequest(array('Please login'));
+                    break;
+                }        
+                if ($this->sendMessage($channelId, $_POST[self::SEND_MESSAGE_FIELD]))
+                    break;
+                else 
+                    return null;
                     
         }
     }
@@ -113,43 +128,29 @@ class Controller extends BaseObject {
 
 
 
-  protected function processCheckout(string $nameOnCard = null, string $cardNumber =  null) : bool {
+  protected function sendMessage(int $channelId = null, string $content =  null) : bool {
+    //var_dump($channelId);
+    //var_dump($content);
+    //die();
 
     $errors = array();
-    $nameOnCard = trim($nameOnCard);
-
-    if ($nameOnCard == null || strlen($nameOnCard) == 0) {
-        $errors[] = 'invalid name on card';
-    }
-
-
-    if ($cardNumber == null || strlen($cardNumber) != 16 || !ctype_digit($cardNumber)) {
-        $errors[] = 'invalid credit card number';
-    }
-
 
     if (count($errors) > 0) {
         $this->forwardRequest($errors);
         return false;
     }
 
-    if (\Slacklight\ShoppingCart::size() == 0) {
-        $this->forwardRequest(array('no items in cart'));
-        return false;
-    }
+    // send message
 
-    // place order
     $user = \Slacklight\AuthenticationManager::getAuthenticatedUser();
-    $orderId = \Data\DataManager::createOrder($user->getId(), 
-            \Slacklight\ShoppingCart::getAll(), $nameOnCard, $cardNumber);
+    $messageId = \Data\DataManager::sendMessage($user->getId(), $channelId, $content);
 
-    if (!$orderId) {
-        $this->forwardRequest(array('could not create order'));
+    if (!$messageId) {
+        $this->forwardRequest(array('could not create message'));
         return false;
     }    
 
-    \Slacklight\ShoppingCart::clear();
-    Util::redirect('index.php?view=success&orderId=' . rawurlencode($orderId));
+    Util::redirect('index.php?view=main&channelId=' . $channelId);
 
     return true;
 
