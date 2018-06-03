@@ -57,7 +57,10 @@
         <div class="panel-body">
           <?php echo $message->getContent(); ?>
           <!-- if seen from others? O.o-->
-          <span class="glyphicon glyphicon-trash"></span>
+          <form class="form-horizontal" method="post" action="<?php echo Util::action(Slacklight\Controller::ACTION_DELETEMESSAGE, array('view' => $view, "messageId" => $message->getId(), "channelId" => $channelId)); ?>">
+            <br>
+            <button class="btn btn-default" type="submit"><span class="glyphicon glyphicon-trash"></span></button>
+          </form>
         </div>
 
       </div>
