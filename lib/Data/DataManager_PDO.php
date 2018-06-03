@@ -260,6 +260,58 @@ class DataManager {
         return $result;
       }
 
+    public static function starMessage (int $messageId) : int {
+        //var_dump($messageId);
+        //die();
+      
+      $con = self::getConnection();
+
+      $con->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
+      
+      $con->beginTransaction();
+      try {
+        self::query($con, "
+        UPDATE message
+          SET favourite = 1
+          WHERE id = ?", array($messageId));
+
+          $con->commit();
+          $result = true;
+      }
+      catch (Exception $e) {
+          $con->rollBack();
+          $result = false;
+      }
+      self::closeConnection();
+      return $result;
+    }
+
+    public static function unStarMessage (int $messageId) : int {
+        //var_dump($messageId);
+        //die();
+      
+      $con = self::getConnection();
+
+      $con->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
+      
+      $con->beginTransaction();
+      try {
+        self::query($con, "
+        UPDATE message
+          SET favourite = 0
+          WHERE id = ?", array($messageId));
+
+          $con->commit();
+          $result = true;
+      }
+      catch (Exception $e) {
+          $con->rollBack();
+          $result = false;
+      }
+      self::closeConnection();
+      return $result;
+    }
+
     public static function createOrder (int $userId, array $bookIds, string $nameOnCard, string $cardNumber) : int {
       $con = self::getConnection();
 

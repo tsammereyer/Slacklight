@@ -12,6 +12,8 @@ class Controller extends BaseObject {
     const ACTION_REGISTER = 'register';
     const ACTION_LOGOUT = 'logout';
     const ACTION_DELETEMESSAGE = 'deletemessage';
+    const ACTION_STARMESSAGE = 'starmessage';
+    const ACTION_UNSTARMESSAGE = 'unstarmessage';
     //DELETE FROM message WHERE id=11 
     const USER_NAME = 'userName';
     const USER_PASSWORD = 'password';
@@ -118,6 +120,35 @@ class Controller extends BaseObject {
                 else 
                     return null;
 
+            case self::ACTION_STARMESSAGE :
+                $user = \Slacklight\AuthenticationManager::getAuthenticatedUser();
+                $messageId = isset($_REQUEST['messageId']) ? (int) $_REQUEST['messageId'] : null;
+                $channelId = isset($_REQUEST['channelId']) ? (int) $_REQUEST['channelId'] : null;
+                //var_dump($messageId);
+                //die();
+                if ($user == null) {
+                    $this->forwardRequest(array('Please login'));
+                    break;
+                }
+                if ($this->starMessage($messageId, $channelId))
+                    break;
+                else 
+                    return null;
+            
+            case self::ACTION_UNSTARMESSAGE :
+                $user = \Slacklight\AuthenticationManager::getAuthenticatedUser();
+                $messageId = isset($_REQUEST['messageId']) ? (int) $_REQUEST['messageId'] : null;
+                $channelId = isset($_REQUEST['channelId']) ? (int) $_REQUEST['channelId'] : null;
+                //var_dump($messageId);
+                //die();
+                if ($user == null) {
+                    $this->forwardRequest(array('Please login'));
+                    break;
+                }
+                if ($this->unStarMessage($messageId, $channelId))
+                    break;
+                else 
+                    return null;
         }
     }
 
@@ -141,6 +172,51 @@ class Controller extends BaseObject {
       $target .= '&errors=' . urlencode(serialize($errors));
     header('location: ' . $target);
     exit();
+  }
+
+  protected function starMessage(int $messageId = null, int $channelId = null) : bool {
+    //var_dump($channelId);
+    //var_dump($messageId);
+    //var_dump($content);
+    //die();
+
+    // delete message
+
+    $user = \Slacklight\AuthenticationManager::getAuthenticatedUser();
+    $result = \Data\DataManager::starMessage($messageId);
+
+    if (!$result) {
+        $this->forwardRequest(array('could not delete message'));
+        return false;
+    }    
+
+    Util::redirect('index.php?view=main&channelId=' . $channelId);
+
+    return true;
+
+  }
+
+  protected function unStarMessage(int $messageId = null, int $channelId = null) : bool {
+    //var_dump($channelId);
+    //var_dump($messageId);
+    //echo("unstar");
+    //var_dump($content);
+    //die();
+
+    // delete message
+
+    $user = \Slacklight\AuthenticationManager::getAuthenticatedUser();
+    $result = \Data\DataManager::unStarMessage($messageId);
+
+    if (!$result) {
+        $this->forwardRequest(array('could not delete message'));
+        return false;
+    }    
+
+    Util::redirect('index.php?view=main&channelId=' . $channelId);
+
+    return true;
+    
   }
 
   protected function deleteMessage(int $messageId = null, int $channelId = null) : bool {

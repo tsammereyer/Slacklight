@@ -41,11 +41,6 @@
       <div class="panel panel-default">
         <div class="panel-heading">
           <h3 class="panel-title">
-            <?php if ($message->getFavourite() == 1): ?>
-              <span class="glyphicon glyphicon-star"></span>
-            <?php else: ?>
-              <span class="glyphicon glyphicon-star-empty"></span>
-            <?php endif; ?>
             <?php if ($message->getSeen() == 0): ?>
               <strong><?php echo $message->getUsername(); ?></strong>
               <?php else: ?>
@@ -57,10 +52,22 @@
         <div class="panel-body">
           <?php echo $message->getContent(); ?>
           <!-- if seen from others? O.o-->
+          <br>         
           <form class="form-horizontal" method="post" action="<?php echo Util::action(Slacklight\Controller::ACTION_DELETEMESSAGE, array('view' => $view, "messageId" => $message->getId(), "channelId" => $channelId)); ?>">
-            <br>
             <button class="btn btn-default" type="submit"><span class="glyphicon glyphicon-trash"></span></button>
           </form>
+
+          <?php if ($message->getFavourite() == 1): ?>
+            <form class="form-horizontal" method="post" action="<?php echo Util::action(Slacklight\Controller::ACTION_UNSTARMESSAGE, array('view' => $view, "messageId" => $message->getId(), "channelId" => $channelId)); ?>">
+              <button class="btn btn-default" type="submit"><span class="glyphicon glyphicon-star"></span></button>
+            </form>
+          <?php else: ?>
+            <form class="form-horizontal" method="post" action="<?php echo Util::action(Slacklight\Controller::ACTION_STARMESSAGE, array('view' => $view, "messageId" => $message->getId(), "channelId" => $channelId)); ?>">
+              <button class="btn btn-default" type="submit"><span class="glyphicon glyphicon-star-empty"></span></button>
+            </form>
+            <?php endif; ?>
+
+          
         </div>
 
       </div>
