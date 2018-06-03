@@ -2,11 +2,15 @@
 
 use Slacklight\AuthenticationManager;
 use Slacklight\Util;
+use Data\DataManager;
 
 if (AuthenticationManager::isAuthenticated()) {
     Util::redirect("index.php");
 }
 $userName = isset($_REQUEST['userName']) ? $_REQUEST['userName'] : null;
+
+$channels = DataManager::getChannels();
+
 ?>
 
 <?php
@@ -35,6 +39,19 @@ require_once('views/partials/header.php');
                     <label for="inputPassword" class="col-sm-2 control-label">Password</label>
                     <div class="col-sm-6">
                         <input type="password" class="form-control" id="inputPassword" name="<?php print Slacklight\Controller::USER_PASSWORD; ?>" placeholder="password">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="inputName" class="col-sm-2 control-label">Which Channels to join?</label>
+                    <div class="col-sm-6">
+                        <?php foreach ($channels as $channel) : ?>    
+                            <div class="form-check ">
+                                <input class="form-check-input" type="checkbox" value="<?php print $channel->getId(); ?>" name="<?php print Slacklight\Controller::SELECTED_CHANNELS_REGISTER; ?>[]">
+                                <label class="form-check-label" >
+                                    #<?php echo $channel->getName(); ?>
+                                </label>
+                            </div>
+                        <?php endforeach; ?>
                     </div>
                 </div>
                 <div class="form-group">

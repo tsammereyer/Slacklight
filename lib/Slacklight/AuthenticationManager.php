@@ -38,16 +38,18 @@ class AuthenticationManager extends BaseObject {
 
     }
 
-    public static function registerUser(string $userName, string $password) : bool {
+    public static function registerUser(string $userName, string $password, $check_list) : bool {
         if (\Data\DataManager::getUserByUserName($userName)) {
             self::signOut();
             return false;
         } else {
         // create a new user in the db and pass on its generated id to variable $user
            $x =  \Data\DataManager::createUser(
-               $userName,
-               hash('sha1', $userName . '|' . $password)
+                $userName,
+                hash('sha1', $userName . '|' . $password),
+                $check_list
            );
+
         $user = \Data\DataManager::getUserById($x);
         var_dump($x);
         var_dump($user);

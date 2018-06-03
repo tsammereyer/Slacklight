@@ -17,6 +17,7 @@ class Controller extends BaseObject {
     //DELETE FROM message WHERE id=11 
     const USER_NAME = 'userName';
     const USER_PASSWORD = 'password';
+    const SELECTED_CHANNELS_REGISTER = 'check_list';
     const ACTION_ORDER = 'placeOrder';
     const ACTION_SENDMESSAGE = "sendMessage";
     const SEND_MESSAGE_FIELD = 'sendMessageField';
@@ -52,7 +53,7 @@ class Controller extends BaseObject {
                 Util::redirect();
                 break;
 
-            case self::ACTION_REMOVE : 
+            case self::ACTION_REMOVE :
                 \Slacklight\ShoppingCart::remove((int) $_REQUEST['bookId']);
                 Util::redirect();
                 break;
@@ -66,13 +67,15 @@ class Controller extends BaseObject {
                 break;
 
             case self::ACTION_REGISTER : 
-            if (!AuthenticationManager::registerUser($_REQUEST[self::USER_NAME], $_REQUEST[self::USER_PASSWORD]))
-                self::forwardRequest(['User already exists.']);
-            Util::redirect();
-            break;
-            default :
-                throw new \Exception('Unknown controller action: ' . $action);
+                //var_dump($_REQUEST[self::SELECTED_CHANNELS_REGISTER]);
+                //die();
+                if (!AuthenticationManager::registerUser($_REQUEST[self::USER_NAME], $_REQUEST[self::USER_PASSWORD], $_REQUEST[self::SELECTED_CHANNELS_REGISTER]))
+                    self::forwardRequest(['User already exists.']);
+                Util::redirect();
                 break;
+                default :
+                    throw new \Exception('Unknown controller action: ' . $action);
+                    break;
 
             case self::ACTION_LOGOUT : 
                     \Slacklight\AuthenticationManager::signOUt();

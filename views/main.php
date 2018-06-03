@@ -27,8 +27,10 @@
 <div class="container-fluid">
   <div class="row">
     <?php require_once('views/partials/sidebar.php'); ?>
-    <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
 
+    
+    <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+    <?php if($channelId !== null):?>
     <h2 class="page-header">#<?php echo $selectedChannel; ?></h2>
 
     <?php foreach ($topics as $topic) : ?>
@@ -36,6 +38,8 @@
     <?php endforeach; ?>
 
     <br/>
+    
+    
 
     <?php foreach ($messages as $message) : ?>
       <div class="panel panel-default">
@@ -81,7 +85,11 @@
       </span>
     </div>
     </form>
-  
+    <?php endif;?>
+    <?php if($channelId === null):?>
+    <h4><-- Please select a channel on the left in the sidebar</h4>
+    <?php endif;?>
+
 </div>
 
 

@@ -165,8 +165,9 @@ class DataManager {
         return $user;
     }
 
-    public static function createUser(string $userName, string $passwordHash) : int {
-        
+    public static function createUser(string $userName, string $passwordHash, $channels) : int {
+        //var_dump($channels);
+        //die();
         $con = self::getConnection();
         $con->beginTransaction();
         try {
@@ -177,12 +178,25 @@ class DataManager {
                 ) VALUES (
                     ?, ?
                 );
-            
                 ", [
                     $userName,
                     $passwordHash
                 ]);
             $userId = self::lastInsertId($con);
+
+            foreach($channels as $channel){
+                self::query($con,"
+                INSERT INTO channel_user_reference (
+                    user_id,
+                    channel_id
+                ) VALUES (
+                    ?, ?
+                );
+                ", [
+                    $userId,
+                    $channel
+                ]);
+            }
             $con->commit();
         } catch (\Exception $e) {
             $con->rollBack();
