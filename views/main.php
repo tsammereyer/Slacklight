@@ -56,17 +56,21 @@
         <div class="panel-body">
           <?php echo $message->getContent(); ?>
           <!-- if seen from others? O.o-->
-          <br>         
-          <form class="form-horizontal" method="post" action="<?php echo Util::action(Slacklight\Controller::ACTION_DELETEMESSAGE, array('view' => $view, "messageId" => $message->getId(), "channelId" => $channelId)); ?>">
+          <br>       
+          <br>  
+          <form style="float:left;" class="form-horizontal" method="post" action="<?php echo Util::action(Slacklight\Controller::ACTION_DELETEMESSAGE, array('view' => $view, "messageId" => $message->getId(), "channelId" => $channelId)); ?>">
             <button class="btn btn-default" type="submit"><span class="glyphicon glyphicon-trash"></span></button>
+          </form>
+          <form style="float:left;" class="form-horizontal" method="post" action="">
+            <button class="btn btn-default" type="submit"><span class="glyphicon glyphicon-pencil"></span></button>
           </form>
 
           <?php if ($message->getFavourite() == 1): ?>
-            <form class="form-horizontal" method="post" action="<?php echo Util::action(Slacklight\Controller::ACTION_UNSTARMESSAGE, array('view' => $view, "messageId" => $message->getId(), "channelId" => $channelId)); ?>">
+            <form style="float:left;" class="form-horizontal" method="post" action="<?php echo Util::action(Slacklight\Controller::ACTION_UNSTARMESSAGE, array('view' => $view, "messageId" => $message->getId(), "channelId" => $channelId)); ?>">
               <button class="btn btn-default" type="submit"><span class="glyphicon glyphicon-star"></span></button>
             </form>
           <?php else: ?>
-            <form class="form-horizontal" method="post" action="<?php echo Util::action(Slacklight\Controller::ACTION_STARMESSAGE, array('view' => $view, "messageId" => $message->getId(), "channelId" => $channelId)); ?>">
+            <form style="float:left;" class="form-horizontal" method="post" action="<?php echo Util::action(Slacklight\Controller::ACTION_STARMESSAGE, array('view' => $view, "messageId" => $message->getId(), "channelId" => $channelId)); ?>">
               <button class="btn btn-default" type="submit"><span class="glyphicon glyphicon-star-empty"></span></button>
             </form>
             <?php endif; ?>
@@ -86,6 +90,8 @@
     </div>
     </form>
     <?php endif;?>
+
+    
     <?php if($channelId === null):?>
     <h4><-- Please select a channel on the left in the sidebar</h4>
     <?php endif;?>
