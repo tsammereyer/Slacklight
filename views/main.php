@@ -61,9 +61,8 @@
           <form style="float:left;" class="form-horizontal" method="post" action="<?php echo Util::action(Slacklight\Controller::ACTION_DELETEMESSAGE, array('view' => $view, "messageId" => $message->getId(), "channelId" => $channelId)); ?>">
             <button class="btn btn-default" type="submit"><span class="glyphicon glyphicon-trash"></span></button>
           </form>
-          <form style="float:left;" class="form-horizontal" method="post" action="">
-            <button class="btn btn-default" type="submit"><span class="glyphicon glyphicon-pencil"></span></button>
-          </form>
+          
+          <a href="index.php?view=edit&channelId=<?php echo $channelId?>&messageId=<?php echo $message->getId();?>"><button class="btn btn-default" ><span class="glyphicon glyphicon-pencil"></span></button></a>
 
           <?php if ($message->getFavourite() == 1): ?>
             <form style="float:left;" class="form-horizontal" method="post" action="<?php echo Util::action(Slacklight\Controller::ACTION_UNSTARMESSAGE, array('view' => $view, "messageId" => $message->getId(), "channelId" => $channelId)); ?>">

@@ -14,6 +14,8 @@ class Controller extends BaseObject {
     const ACTION_DELETEMESSAGE = 'deletemessage';
     const ACTION_STARMESSAGE = 'starmessage';
     const ACTION_UNSTARMESSAGE = 'unstarmessage';
+    //const ACTION_EDITMESSAGE = 'editmessage';
+    const ACTION_UPDATEMESSAGE = 'updatemessage';
     //DELETE FROM message WHERE id=11 
     const USER_NAME = 'userName';
     const USER_PASSWORD = 'password';
@@ -21,6 +23,8 @@ class Controller extends BaseObject {
     const ACTION_ORDER = 'placeOrder';
     const ACTION_SENDMESSAGE = "sendMessage";
     const SEND_MESSAGE_FIELD = 'sendMessageField';
+    const UPDATE_MESSAGE_FIELD = 'updateMessageField';
+
 
 
     private static $instance = false;
@@ -152,6 +156,24 @@ class Controller extends BaseObject {
                     break;
                 else 
                     return null;
+            case self::ACTION_UPDATEMESSAGE :
+                $user = \Slacklight\AuthenticationManager::getAuthenticatedUser();
+                $messageId = isset($_REQUEST['messageId']) ? (int) $_REQUEST['messageId'] : null;
+                $channelId = isset($_REQUEST['channelId']) ? (int) $_REQUEST['channelId'] : null;
+
+                //var_dump($messageId);
+                //var_dump($channelId);
+                //var_dump($_POST[self::UPDATE_MESSAGE_FIELD]);
+                //die();
+
+                if ($user == null) {
+                    $this->forwardRequest(array('Please login'));
+                        break;
+                }
+                if ($this->updateMessage($channelId, $messageId, $_POST[self::UPDATE_MESSAGE_FIELD]))
+                    break;
+                else 
+                    return null;
         }
     }
 
@@ -255,6 +277,28 @@ class Controller extends BaseObject {
 
     $user = \Slacklight\AuthenticationManager::getAuthenticatedUser();
     $result = \Data\DataManager::sendMessage($user->getId(), $channelId, $content);
+
+    if (!$result) {
+        $this->forwardRequest(array('could not create message'));
+        return false;
+    }    
+
+    Util::redirect('index.php?view=main&channelId=' . $channelId);
+
+    return true;
+
+
+  }
+
+  protected function updateMessage(int $channelId = null, int $messageId = null, string $content = null) : bool {
+    //var_dump($channelId);
+    //var_dump($content);
+    //die();
+
+    // send message
+
+    $user = \Slacklight\AuthenticationManager::getAuthenticatedUser();
+    $result = \Data\DataManager::updateMessage($user->getId(), $messageId, $content);
 
     if (!$result) {
         $this->forwardRequest(array('could not create message'));

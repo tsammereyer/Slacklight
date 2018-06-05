@@ -165,6 +165,22 @@ class DataManager {
         return $user;
     }
 
+    public static function getMessageById (int $messageId) {
+        $message = null;
+        $con = self::getConnection();
+        $res = self::query($con, "
+          SELECT id, user_id, channel_id ,content, created, deleted, seen, favourite
+          FROM message
+          WHERE id = ?
+        ", array($messageId));
+        if ($m = self::fetchObject($res)) {
+            //(int $id, int $userId, int $channelId, string $username, string $content, string $created, int $seen, int $favourite)
+            $message = new Message($m->id, $m->user_id, $m->channel_id,"", $m->content, $m->created, $m->deleted, $m->seen, $m->favourite);
+        }
+        self::closeConnection();
+        return $message;
+    }
+
     public static function createUser(string $userName, string $passwordHash, $channels) : int {
         //var_dump($channels);
         //die();
@@ -246,6 +262,34 @@ class DataManager {
         }
         self::closeConnection();
         return $messageId;
+      }
+
+      public static function updateMessage (int $userId, int $messageId, string $content) : int {
+        //echo "derp";
+        //die;
+
+        $con = self::getConnection();
+  
+        $con->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
+        
+        $con->beginTransaction();
+        try {
+          self::query($con, "
+            UPDATE message 
+            SET content = ?
+            WHERE id = ?;", array($content, $messageId));
+  
+              //$messageId = $con->lastInsertId();
+              $con->commit();
+              $res=true;
+          
+        }
+        catch (Exception $e) {
+            $con->rollBack();
+            $res = false;
+        }
+        self::closeConnection();
+        return $res;
       }
 
       public static function deleteMessage (int $messageId) : int {
